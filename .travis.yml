@@ -24,7 +24,7 @@ jobs:
       - docker push $ANGULAR_REPO
     - stage: BOOT
       script: 
-      - cd CounterWeb
+      - cd CounterWebApp
       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
       - docker build -f Dockerfile -t $MIDDLEWARE_REPO:$COMMIT .
