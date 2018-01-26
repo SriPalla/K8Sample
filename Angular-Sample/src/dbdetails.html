@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>AngularJS|Controller</title>
+<script	src="angular.min.js"></script>
+<script src="dbdetails.js"></script>
+</head>
+<body>
+<div ng-app="mainApp">
+	<div ng-controller="table">
+		<ul>
+			<h2>Table Name</h2>
+			<li ng-repeat="table in tables">
+			{{table}}
+			</li>
+		</ul>
+	</div>
+</div>
+</body>
+</html>

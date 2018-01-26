@@ -1,0 +1,46 @@
+env:
+  global:
+  - ANGULAR_REPO=srikanthpalla/db-details-angular
+  - MIDDLEWARE_REPO=srikanthpalla/db-details-boot
+  - MYSQL_REPO=srikanthpalla/db-details-mysql
+  - COMMIT=${TRAVIS_COMMIT::8}
+
+
+sudo: required
+
+services:
+  - docker
+
+jobs:
+  include:
+    - stage: ANGULAR
+      script: 
+      - cd Angular-Sample
+      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+      - docker build -f Dockerfile -t $ANGULAR_REPO:$COMMIT .
+      - docker tag $ANGULAR_REPO:$COMMIT $ANGULAR_REPO:$TAG
+      - docker tag $ANGULAR_REPO:$COMMIT $ANGULAR_REPO:travis-$TRAVIS_BUILD_NUMBER
+      - docker push $ANGULAR_REPO
+    - stage: BOOT
+      script: 
+      - cd CounterWeb
+      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+      - docker build -f Dockerfile -t $MIDDLEWARE_REPO:$COMMIT .
+      - docker tag $MIDDLEWARE_REPO:$COMMIT $MIDDLEWARE_REPO:$TAG
+      - docker tag $MIDDLEWARE_REPO:$COMMIT $MIDDLEWARE_REPO:travis-$TRAVIS_BUILD_NUMBER
+      - docker push $MIDDLEWARE_REPO
+    - stage: MYSQL
+      script: 
+      - cd MySql
+      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+      - docker build -f Dockerfile -t $MYSQL_REPO:$COMMIT .
+      - docker tag $MYSQL_REPO:$COMMIT $MYSQL_REPO:$TAG
+      - docker tag $MYSQL_REPO:$COMMIT $MYSQL_REPO:travis-$TRAVIS_BUILD_NUMBER
+      - docker push $MYSQL_REPO
+    #- stage: XL RELEASE
+    #  script:
+    #  - cd xlr
+    #  - sh deploy_votingapp.sh $XLR_CREDENTIALS $XLR_VOTE_DEPLOY_PATH $ANGULAR_REPO:travis-$TRAVIS_BUILD_NUMBER
