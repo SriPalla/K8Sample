@@ -13,7 +13,7 @@ RUN ["mvn", "dependency:resolve"]
 RUN ["mvn", "verify"]
 
 # Adding source, compile and package into a fat jar
-ADD src/main /code/src/main/java
+ADD src/main /code/src/main
 RUN ["mvn", "package"]
 
 CMD ["java", "-jar", "target/CounterWebBoot.jar"]
