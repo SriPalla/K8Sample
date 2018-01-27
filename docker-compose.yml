@@ -1,0 +1,33 @@
+version: "3"
+
+networks: 
+  k8sample:
+      driver: overlay
+
+services:
+  angularweb:
+    image: srikanthpalla/db-details-angular
+    ports:
+      - "80:9090"
+    networks:
+      - k8sample
+
+  counterweb:
+    image: srikanthpalla/db-details-boot
+    ports:
+      - "8080:8080"
+    networks:
+      - k8sample
+
+  mysqldb:
+    image: srikanthpalla/db-details-mysql
+    container_name: mysqldb
+    ports:
+      - "3306:3306"
+    volumes:
+      - "db-data:/var/lib/mysql"
+    networks:
+      - k8sample
+
+volumes:
+  db-data: /var/data/mysql
