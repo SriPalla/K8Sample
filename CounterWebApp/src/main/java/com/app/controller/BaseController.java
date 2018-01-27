@@ -1,32 +1,45 @@
 package com.app.controller;
 
-import java.util.Arrays;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.api.DbTableDetailsDto;
-
+import com.app.api.BicDetailsDto;
+import com.app.api.ResponseDto;
 
 @RestController
 @CrossOrigin(maxAge = 1500)
 public class BaseController {
-	@RequestMapping(value = "/getDbTableNames", method = RequestMethod.GET)
-	public ResponseEntity<DbTableDetailsDto> welcomeName() {
-		DbTableDetailsDto response = new DbTableDetailsDto();
-		populatesRandomTableNames(response);
-		return new ResponseEntity<DbTableDetailsDto>(response, HttpStatus.OK);
+	@Autowired JdbcTemplate jdbcTemplate;
+
+	@RequestMapping(value = "/getAllBics", method = RequestMethod.GET)
+	public ResponseEntity<ResponseDto> getAllBics() throws SQLException {
+		ResponseDto response = getDataFromDb();
+		return new ResponseEntity<ResponseDto>(response, HttpStatus.OK);
 	}
 
-	private void populatesRandomTableNames(DbTableDetailsDto response) {
-		List<String> value = Arrays.asList("host_summary_by_file_io", "host_summary_by_file_io_type",
-				"host_summary_by_stages", "host_summary_by_statement_latency", "host_summary_by_statement_type",
-				"innodb_buffer_stats_by_schema");
-		response.setTableName(value);
+	private ResponseDto getDataFromDb() throws SQLException {
+		List<BicDetailsDto> bic = jdbcTemplate.query("select * from core.bic_identifier", new RowMapper<BicDetailsDto>() {
+			@Override
+			public BicDetailsDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+				BicDetailsDto response = new BicDetailsDto();
+				response.setBicCode(rs.getString(1));
+				response.setDescription(rs.getString(2));
+				return response;
+			}
+		});
+		ResponseDto response = new ResponseDto();
+		response.setResponse(bic);
+		return response;
 	}
 }

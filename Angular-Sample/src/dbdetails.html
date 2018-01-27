@@ -2,18 +2,40 @@
 <html lang="en-US">
 <head>
 <title>AngularJS|Controller</title>
-<script	src="angular.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <script src="dbdetails.js"></script>
+<style>
+table, th , td {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+}
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+</style>
 </head>
 <body>
-<div ng-app="mainApp">
-	<div ng-controller="table">
-		<ul>
-			<h2>Table Name</h2>
-			<li ng-repeat="table in tables">
-			{{table}}
-			</li>
-		</ul>
+<div ng-app="mainApp"> <br/>
+	<div ng-controller="table" align="center">
+		<table>
+			<thead>
+				<tr>
+					<td>BIC Code</td>
+					<td>Description</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="record in records">
+					<td>{{record.bicCode}}</td>
+					<td>{{record.description}}</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>
 </body>
