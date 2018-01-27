@@ -1,6 +1,6 @@
 version: "3"
 
-networks: 
+networks:
   k8sample:
       driver: overlay
 
@@ -16,12 +16,16 @@ services:
     image: srikanthpalla/db-details-boot
     ports:
       - "8080:8080"
+    depends_on:
+      - mysqldb
     networks:
       - k8sample
 
   mysqldb:
     image: srikanthpalla/db-details-mysql
     container_name: mysqldb
+    env_file:
+      - .env
     ports:
       - "3306:3306"
     volumes:
