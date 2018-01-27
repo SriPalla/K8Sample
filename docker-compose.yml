@@ -30,4 +30,4 @@ services:
       - k8sample
 
 volumes:
-  db-data: /var/data/mysql
+  db-data:
