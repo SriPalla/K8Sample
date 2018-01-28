@@ -8,8 +8,6 @@ appInsights.setup("a7cd99db-0cd4-4939-b39c-98a1affa7920")
     .start();
 
 var express = require('express'),
-    async = require('async'),
-    pg = require("pg"),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
@@ -30,48 +28,6 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-async.retry(
-  {times: 1000, interval: 1000},
-  function(callback) {
-    pg.connect('postgres://postgres@db/postgres', function(err, client, done) {
-      if (err) {
-        console.error("Waiting for db");
-      }
-      callback(err, client);
-    });
-  },
-  function(err, client) {
-    if (err) {
-      return console.err("Giving up");
-    }
-    console.log("Connected to db");
-    getVotes(client);
-  }
-);
-
-function getVotes(client) {
-  client.query('SELECT vote, COUNT(id) AS count FROM votes GROUP BY vote', [], function(err, result) {
-    if (err) {
-      console.error("Error performing query: " + err);
-    } else {
-      var votes = collectVotesFromResult(result);
-      io.sockets.emit("scores", JSON.stringify(votes));
-      
-    }
-
-    setTimeout(function() {getVotes(client) }, 1000);
-  });
-}
-
-function collectVotesFromResult(result) {
-  var votes = {a: 0, b: 0};
-
-  result.rows.forEach(function (row) {
-    votes[row.vote] = parseInt(row.count);
-  });
-
-  return votes;
-}
 
 app.use(cookieParser());
 app.use(bodyParser());
