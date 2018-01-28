@@ -5,8 +5,6 @@ var express = require('express'),
     app = express(),
     server = require('http').Server(app),
 
-var port = process.env.PORT || 4000;
-
 app.use(cookieParser());
 app.use(bodyParser());
 app.use(methodOverride('X-HTTP-Method-Override'));
@@ -23,7 +21,7 @@ app.get('/', function (req, res) {
   res.sendFile(path.resolve(__dirname + '/views/index.html'));
 });
 
-server.listen(port, function () {
+server.listen(9090, function () {
   var port = server.address().port;
   console.log('App running on port ' + port);
 });
