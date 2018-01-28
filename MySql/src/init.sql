@@ -1,5 +1,6 @@
 CREATE DATABASE IF NOT EXISTS `core`;
 USE `core`;
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'testadmin'@'%';
 CREATE TABLE `core.bic_identifier` (
   `bic_code` char(11) NOT NULL,
   `description` varchar(250) DEFAULT NULL,
