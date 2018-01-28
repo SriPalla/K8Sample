@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http'
   providers: [HttpClient]
 })
 export class AppComponent implements OnInit {
-  records: any[];
+  records: any;
 
   constructor(private http: HttpClient) {
   }
@@ -22,7 +22,15 @@ export class AppComponent implements OnInit {
 
     this.http.get('http://counterweb:8080/getAllBics', httpOptions).subscribe(data => {
       console.log(data);
+      this.records = data;
     });
   }
 
+}
+export interface BicData {
+  response: Bic[]
+}
+export interface Bic {
+  bicCode: string;
+  description: string;
 }
