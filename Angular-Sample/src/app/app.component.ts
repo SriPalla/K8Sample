@@ -1,20 +1,27 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [HttpClient]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   records: any[];
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit(): void {
-    this.http.get('http://counterweb/getAllBics').subscribe(data => {
-      console.log(data.response);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*'
+      })
+    };
+
+    this.http.get('http://192.168.0.108:9090/getAllBics', httpOptions).subscribe(data => {
+      console.log(data);
     });
   }
 

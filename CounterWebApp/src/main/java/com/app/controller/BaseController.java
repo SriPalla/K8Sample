@@ -18,7 +18,7 @@ import com.app.api.BicDetailsDto;
 import com.app.api.ResponseDto;
 
 @RestController
-@CrossOrigin(maxAge = 1500)
+@CrossOrigin(maxAge = 3600)
 public class BaseController {
 	@Autowired JdbcTemplate jdbcTemplate;
 

@@ -15,7 +15,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="record in records">
+				<tr *ngFor="let record of records">
 					<td>{{record.bicCode}}</td>
 					<td>{{record.description}}</td>
 				</tr>
