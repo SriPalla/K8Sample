@@ -1,4 +1,4 @@
-FROM java:openjdk-8-jdk-alpine
+FROM java:8
 
 RUN MAVEN_VERSION=3.3.3 \
  && cd /usr/share \
@@ -14,6 +14,7 @@ RUN ["mvn", "verify"]
 
 # Adding source, compile and package into a fat jar
 ADD src/main /code/src/main
+RUN ["ls", "-lsa", "/code/src/main"]
 RUN ["mvn", "package"]
 
 CMD ["java", "-jar", "target/CounterWebBoot.jar"]
