@@ -2,19 +2,22 @@
 <html lang="en-US">
 <head>
 <title>AngularJS|Controller</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="dbdetails.js"></script>
 <style>
-  table, th , td {
-    border: 1px solid grey;
-    border-collapse: collapse;
-    padding: 5px;
-  }
-  table tr:nth-child(odd) {
-    background-color: #f1f1f1;
-  }
-  table tr:nth-child(even) {
-    background-color: #ffffff;
-  }
-  </style>
+table, th , td {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+}
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+</style>
 </head>
 <body>
 <div ng-app="mainApp"> <br/>
@@ -27,7 +30,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let record of records">
+				<tr ng-repeat="record in records">
 					<td>{{record.bicCode}}</td>
 					<td>{{record.description}}</td>
 				</tr>
