@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
       })
     };
 
-    this.http.get('http://192.168.0.108:9090/getAllBics', httpOptions).subscribe(data => {
+    this.http.get('http://counterweb:8080/getAllBics', httpOptions).subscribe(data => {
       console.log(data);
     });
   }

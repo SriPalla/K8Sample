@@ -23,6 +23,7 @@ public class BaseController {
 	@Autowired JdbcTemplate jdbcTemplate;
 
 	@RequestMapping(value = "/getAllBics", method = RequestMethod.GET)
+	@CrossOrigin(maxAge = 3600)
 	public ResponseEntity<ResponseDto> getAllBics() throws SQLException {
 		ResponseDto response = getDataFromDb();
 		return new ResponseEntity<ResponseDto>(response, HttpStatus.OK);
