@@ -14,7 +14,6 @@ RUN ["mvn", "verify"]
 
 # Adding source, compile and package into a fat jar
 ADD src/main /code/src/main
-RUN ["ls", "-lsa", "/code/src/main"]
 RUN ["mvn", "package"]
 
 CMD ["java", "-jar", "target/CounterWebBoot.jar"]

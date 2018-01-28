@@ -1,33 +1,11 @@
-const appInsights = require("applicationinsights");
-appInsights.setup("a7cd99db-0cd4-4939-b39c-98a1affa7920")
-    .setAutoDependencyCorrelation(true)
-    .setAutoCollectRequests(true)
-    .setAutoCollectPerformance(true)
-    .setAutoCollectExceptions(true)
-    .setAutoCollectDependencies(true)
-    .start();
-
 var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     app = express(),
     server = require('http').Server(app),
-    io = require('socket.io')(server);
-
-io.set('transports', ['polling']);
 
 var port = process.env.PORT || 4000;
-
-io.sockets.on('connection', function (socket) {
-
-  socket.emit('message', { text : 'Welcome!' });
-
-  socket.on('subscribe', function (data) {
-    socket.join(data.channel);
-  });
-});
-
 
 app.use(cookieParser());
 app.use(bodyParser());
