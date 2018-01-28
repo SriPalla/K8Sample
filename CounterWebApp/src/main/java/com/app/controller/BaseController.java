@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.api.BicDetailsDto;
-import com.app.api.ResponseDto;
 
 @RestController
 @CrossOrigin(maxAge = 3600)
@@ -24,12 +23,12 @@ public class BaseController {
 
 	@RequestMapping(value = "/getAllBics", method = RequestMethod.GET)
 	@CrossOrigin(maxAge = 3600)
-	public ResponseEntity<ResponseDto> getAllBics() throws SQLException {
-		ResponseDto response = getDataFromDb();
-		return new ResponseEntity<ResponseDto>(response, HttpStatus.OK);
+	public ResponseEntity<List<BicDetailsDto>> getAllBics() throws SQLException {
+		List<BicDetailsDto> response = getDataFromDb();
+		return new ResponseEntity<List<BicDetailsDto>>(response, HttpStatus.OK);
 	}
 
-	private ResponseDto getDataFromDb() throws SQLException {
+	private List<BicDetailsDto> getDataFromDb() throws SQLException {
 		List<BicDetailsDto> bic = jdbcTemplate.query("select * from core.bic_identifier", new RowMapper<BicDetailsDto>() {
 			@Override
 			public BicDetailsDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -39,8 +38,6 @@ public class BaseController {
 				return response;
 			}
 		});
-		ResponseDto response = new ResponseDto();
-		response.setResponse(bic);
-		return response;
+		return bic;
 	}
 }
