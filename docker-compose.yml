@@ -9,7 +9,7 @@ services:
     image: srikanthpalla/db-details-angular
     container_name: angularweb
     ports:
-      - "9090:9090"
+      - "9090:80"
     networks:
       - k8sample
 

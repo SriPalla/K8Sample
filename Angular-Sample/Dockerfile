@@ -1,20 +1,34 @@
-FROM node:5.11.0-slim
+### STAGE 1: Build ###
 
-WORKDIR /app
+# We label our stage as 'builder'
+FROM node:8-alpine as builder
 
-RUN npm install -g nodemon
-RUN npm install applicationinsights --save
-ADD package.json /app/package.json
-RUN npm config set registry http://registry.npmjs.org
+COPY package.json package-lock.json ./
 
-RUN cd $(npm root -g)/npm && npm install fs-extra && sed -i -e s/graceful-fs/fs-extra/ -e s/fs.rename/fs.move/ ./lib/utils/rename.js
+RUN npm set progress=false && npm config set depth 0 && npm cache clean --force
 
-RUN npm install && npm ls
-RUN mv /app/node_modules /node_modules
+## Storing node modules on a separate layer will prevent unnecessary npm installs at each build
+RUN npm i && mkdir /ng-app && cp -R ./node_modules ./ng-app
 
-ADD . /app
+WORKDIR /ng-app
 
-ENV PORT 9090
-EXPOSE 9090
+COPY . .
 
-CMD ["node", "server.js"]
+## Build the angular app in production mode and store the artifacts in dist folder
+RUN $(npm bin)/ng build --prod --build-optimizer
+
+
+### STAGE 2: Setup ###
+
+FROM nginx:1.13.3-alpine
+
+## Copy our default nginx config
+COPY nginx/default.conf /etc/nginx/conf.d/
+
+## Remove default nginx website
+RUN rm -rf /usr/share/nginx/html/*
+
+## From 'builder' stage copy over the artifacts in dist folder to default nginx public folder
+COPY --from=builder /ng-app/dist /usr/share/nginx/html
+
+CMD ["nginx", "-g", "daemon off;"]
